@@ -8,12 +8,31 @@ This repository collects the full research & development pipeline for a project 
 
 1. **Loads the Cora citation graph**,  
 2. **Runs exhaustive hyper‑parameter searches** over four different GNN architectures (GCN, GAT, GraphSAGE, APPNP) using custom 60/20/20 and 80/10/10 train/val/test splits,  
-3. **Identifies the “champion” configuration** of each model,  
+3. **Identifies the "champion" configuration** of each model,  
 4. **Extends with robustness/regularisation experiments** (edge dropout, residual links, LR scheduling, etc.),  
 5. **Saves the best models and graph data**, and  
 6. **Serves an interactive Streamlit app** that lets you visualise the graph, select models and make quick predictions.
 
 The notebooks document every step of the process; the Streamlit app lets you share the results with others without re‑training.
+
+---
+
+## 🚀 Live Streamlit App
+
+Access the interactive dashboard here: **[Streamlit App](https://your-app-name.streamlit.app)**
+
+The app loads instantly with pre-trained models and visualizes the Cora citation network in real-time.
+
+### Features:
+- **Four GNN Models**: APPNP, GAT, GraphSAGE, GCN
+- **Interactive Graph Visualization**: Explore the Cora citation network
+- **Real-time Predictions**: Select a model and inspect node classifications
+- **Color-coded Topics**: 7 research topics with distinct colors
+
+### Deployment:
+- Repository linked to Streamlit Cloud via GitHub
+- Automatic deployments on `git push`
+- Models and graph data loaded from `app_data/`
 
 ---
 
@@ -46,16 +65,17 @@ pip install -r requirements.txt
 
 ---
 
-## 📁 Project structure
+## 📁 Project Structure
 
 ```
 Project2/
 ├── .gitignore                   # ignores envs, data, caches, etc.
 ├── requirements.txt             # Python deps for deployment
+├── README.md                    # This file
 ├── app.py                       # Streamlit dashboard
 ├── .streamlit/                  # Streamlit configuration (theme, logger)
 │   └── config.toml
-├── app_data/                    #  committed: saved models & graph data
+├── app_data/                    # ✅ committed: saved models & graph data
 │   ├── champion_appnp.pth
 │   ├── champion_gcn.pth
 │   ├── champion_gat.pth
@@ -64,7 +84,7 @@ Project2/
 │   ├── cora_edge_index.pt
 │   ├── cora_nodes.csv
 │   └── cora_edges.csv
-├── data/                        #  ignored raw dataset (Planetoid download)
+├── data/                        # ❌ ignored raw dataset (Planetoid download)
 ├── 4_gat_model.ipynb            # 60/20/20 split GAT experiments
 ├── 4_gat80_model.ipynb          # 80/10/10 split GAT experiments
 ├── 5_graphsage_model.ipynb      # 60/20/20 GraphSAGE experiments
@@ -77,84 +97,150 @@ Project2/
 
 ---
 
-##  How the project was carried out
+## 🧠 How the Project Was Carried Out
 
-1. **Environment & data setup** – all notebooks start by bypassing macOS SSL, selecting `mps`/`cuda`/`cpu` device, loading `Planetoid(root='./data/Cora', name='Cora', transform=T.NormalizeFeatures())` and applying `RandomNodeSplit`.
+### 1. Environment & Data Setup
+All notebooks start by:
+- Bypassing macOS SSL certificates
+- Selecting `mps`/`cuda`/`cpu` device
+- Loading `Planetoid(root='./data/Cora', name='Cora', transform=T.NormalizeFeatures())`
+- Applying `RandomNodeSplit` with custom train/val/test splits
 
-2. **Model definitions** – lightweight PyG modules for
+### 2. Model Definitions
+Lightweight PyTorch Geometric modules for:
+- **GCN_Standard** (+ residual variant)
+- **FlexibleGAT** (variable layers/heads)
+- **FlexibleGraphSAGE** (variable layers)
+- **APPNPNet** (with propagation and residual MLP)
 
-   - `GCN_Standard` (+ residual variant),
-   - `FlexibleGAT` (variable layers/heads),
-   - `FlexibleGraphSAGE` (variable layers),
-   - `APPNPNet` (with propagation and residual MLP).
+### 3. Grid Search Loops
+For each architecture:
+- Iterate over learning rates, hidden dims, dropouts
+- Vary number of layers or PageRank hops/α
+- Record test accuracy/F1 for best val epoch
+- Early stopping applied where appropriate
 
-3. **Grid search loops** – for each architecture, iterate over learning rates, hidden dims, dropouts, (and where appropriate) number of layers or PageRank hops/α. Record test accuracy/F1 for the best val epoch. Early stopping used in some notebooks.
+### 4. Result Aggregation
+- Store results in lists
+- Convert to `pandas.DataFrame`
+- Sort by macro‑F1
+- Check thresholds (target_acc=0.82, target_f1=0.80)
+- Extract champions and save CSVs
 
-4. **Result aggregation** – results stored in lists, converted to `pandas.DataFrame`, sorted by macro‑F1, thresholds checked (target_acc=0.82, target_f1=0.80), and champions extracted. CSVs saved for each grid search.
+### 5. Stability Testing
+- Re-train top‑5 configs 5× with different seeds
+- Compute mean/std of test metrics
+- Pick "true champion" based on consistency
 
-5. **Stability tests** – top‑5 configs retrained 5× with different seeds; mean/std of test metrics computed to pick a “true champion”.
+### 6. Final Training & Diagnostics
+- Re‑train true champion for 200 epochs
+- Plot learning curves
+- Produce classification reports
+- Generate t‑SNE embeddings of node representations
 
-6. **Final training & diagnostics** – re‑train the true champion for 200 epochs, plot learning curves, produce classification reports and t‑SNE embeddings of node representations.
+### 7. Additional Experiments
+Later notebooks introduce:
+- Feature normalization ablation
+- Edge dropout data augmentation
+- Residual links in MLP/GCN
+- Learning‑rate schedulers (ReduceLROnPlateau)
+- Comparisons via confusion matrices and t‑SNE
 
-7. **Additional experiments** – later notebooks introduce:
-
-   - Feature normalization ablation,
-   - Edge dropout data augmentation,
-   - Residual links in MLP/GCN,
-   - Learning‑rate schedulers (ReduceLROnPlateau),
-   - Comparisons via confusion matrices and t‑SNE.
-
-8. **Model saving** – the champion models and graph tensors/CSV metadata are dumped to `app_data/` for deployment.
-
----
-
-##  Deploying the Streamlit app
-
-The file `app.py` contains:
-
-- definitions of the four GNN classes,
-- a `get_model()` helper loading weights from `app_data`,
-- sidebar controls (model selection, centre node slider, edge‑weight threshold, etc.),
-- functions to run inference and visualise the graph using PyVis,
-- miscellaneous UI layout and color maps.
-
-To start locally:
-
-```bash
-streamlit run app.py
-```
-
-The app will load the saved `.pth` models and the pre‑computed features/edge_index, so it starts instantly.
-
-### GitHub & Streamlit Cloud
-
-1. Ensure `.gitignore` does **not** ignore `app_data/`, but still ignores `data/`.
-2. Add/commit everything, including the `app_data` directory:
-
-   ```bash
-   git add app.py requirements.txt .streamlit/ app_data/
-   git commit -m "Prepare for Streamlit deployment"
-   git push origin main
-   ```
-
-3. On [share.streamlit.io](https://share.streamlit.io), link your GitHub repository and specify `app.py` as the main file. Streamlit will install dependencies from `requirements.txt` and serve the dashboard.
+### 8. Model Saving
+- Save champion models to `app_data/*.pth`
+- Dump graph tensors to `app_data/*.pt`
+- Save node/edge metadata as CSV
 
 ---
 
-##  Notes
+## 📦 What Each File Contains
 
-- The raw Cora dataset downloaded by PyG lives in `data/`. It is large and ignored by Git – you don’t need it for deployment.
-- The notebooks document the exact hyperparameters tried in the grid searches. Feel free to re‑run them (they can take a few minutes each).
-- The Streamlit app supports four architectures and lets you visualise individual nodes, examine neighbours, and compare predicted labels with ground truth.
+### Jupyter Notebooks (Research & Development)
+
+| Notebook | Purpose | Train/Val/Test Split |
+|----------|---------|----------------------|
+| `4_gat_model.ipynb` | GAT grid search, stability, diagnostics | 60/20/20 |
+| `4_gat80_model.ipynb` | GAT grid search, stability, diagnostics | 80/10/10 |
+| `5_graphsage_model.ipynb` | GraphSAGE grid search, stability, diagnostics | 60/20/20 |
+| `5_graphsage80_model.ipynb` | GraphSAGE grid search, stability, diagnostics | 80/10/10 |
+| `6_appnp_model.ipynb` | APPNP hyper-search, selection, validation | 80/10/10 |
+| `7_champion_experiments.ipynb` | APPNP final training, normalization ablation, edge dropout, residual links, LR scheduling | 80/10/10 |
+| `7_champion_expirements2.ipynb` | GCN champion robustness, residual variants, diagnostics | 80/10/10 |
+
+### Application Files
+
+| File | Purpose |
+|------|---------|
+| `app.py` | Streamlit dashboard with model selection, graph visualization, and inference |
+| `.streamlit/config.toml` | Streamlit theme and logger configuration |
+| `requirements.txt` | Python dependencies for deployment |
+| `.gitignore` | Git ignore rules for clean repository |
+
+### Data Directories
+
+| Directory | Purpose | Git Status |
+|-----------|---------|-----------|
+| `app_data/` | Saved model weights, graph tensors, and metadata | ✅ Committed |
+| `data/` | Raw Cora dataset (auto-downloaded by PyG) | ❌ Ignored |
 
 ---
 
-##  Summary
+## 🎯 Key Results
+
+### Champion Models (80/10/10 Split)
+
+| Model | LR | Hidden Dim | Dropout | Layers/Hops | Test Accuracy | Macro-F1 |
+|-------|----|----|---------|----------|---------------|----------|
+| APPNP | 0.01 | 64 | 0.3 | K=10, α=0.1 | ~89% | ~87% |
+| GAT | 0.01 | 64 | 0.3 | 2-4 | ~85% | ~84% |
+| GraphSAGE | 0.01 | 64 | 0.3 | 2-4 | ~82% | ~80% |
+| GCN | 0.01 | 64 | 0.3 | 2 | ~88% | ~86% |
+
+*Note: Exact values vary by seed; see notebooks for full results.*
+
+---
+
+## 💾 Cora Dataset Overview
+
+- **Nodes**: 2,708 papers
+- **Edges**: 5,429 citations
+- **Features**: 1,433 bag-of-words
+- **Classes**: 7 research topics
+  - Theory
+  - Reinforcement Learning
+  - Genetic Algorithms
+  - Neural Networks
+  - Probabilistic Methods
+  - Case Based
+  - Rule Learning
+- **Size**: ~2.8 MB (ignored in repo)
+
+---
+
+## 📝 Notes
+
+- The raw Cora dataset lives in `data/` and is ignored by Git – you don't need it for deployment
+- The notebooks document exact hyperparameters for all grid searches; re-run them to extend experiments
+- The Streamlit app supports four architectures and lets you visualise individual nodes, examine neighbours, and compare predicted labels with ground truth
+- All saved models in `app_data/` are committed to GitHub for instant deployment
+
+---
+
+## 🏁 Summary
 
 This repository is both a **research log** (via Jupyter notebooks) and a **deployable application**. It demonstrates:
 
-- systematic GNN benchmarking,
-- reproducibility through saved model weights,
-- and an interactive interface for exploring a citation network.
+- Systematic GNN benchmarking across four architectures
+- Reproducibility through saved model weights
+- Interactive interface for exploring a citation network
+- Production-ready Streamlit deployment
 
-Use the notebooks to extend experiments; use `app.py` and `requirements.txt` to deploy your own version.
+Use the notebooks to extend experiments; use the Streamlit app to share results with collaborators.
+
+---
+
+## 📧 Questions or Contributions?
+
+Feel free to open issues or submit pull requests. For deployment help, refer to [Streamlit Cloud documentation](https://docs.streamlit.io/streamlit-cloud).
+
+Happy exploring! 🚀
