@@ -191,10 +191,10 @@ Later notebooks introduce:
 
 | Model | LR | Hidden Dim | Dropout | Layers/Hops | Test Accuracy | Macro-F1 |
 |-------|----|----|---------|----------|---------------|----------|
-| APPNP | 0.01 | 64 | 0.3 | K=10, α=0.1 | ~89% | ~87% |
-| GAT | 0.01 | 64 | 0.3 | 2-4 | ~85% | ~84% |
-| GraphSAGE | 0.01 | 64 | 0.3 | 2-4 | ~82% | ~80% |
-| GCN | 0.01 | 64 | 0.3 | 2 | ~88% | ~86% |
+| APPNP | 0.01 | 64 | 0.3 | K=10, α=0.1 | ~90.77% | ~91.11% |
+| GAT | 0.01 | 64 | 0.3 | 2-4 | ~88.1% | ~87% |
+| GraphSAGE | 0.01 | 64 | 0.3 | 2-4 | ~88.6% | ~89% |
+| GCN | 0.01 | 64 | 0.3 | 2 | ~90.77% | ~90.60% |
 
 *Note: Exact values vary by seed; see notebooks for full results.*
 
