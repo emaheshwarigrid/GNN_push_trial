@@ -19,7 +19,7 @@ The notebooks document every step of the process; the Streamlit app lets you sha
 
 ## 🚀 Live Streamlit App
 
-Access the interactive dashboard here: **[Streamlit App](https://your-app-name.streamlit.app)**
+Access the interactive dashboard here: **[Streamlit App](https://gnn-citation-explorer.streamlit.app/)**
 
 The app loads instantly with pre-trained models and visualizes the Cora citation network in real-time.
 
