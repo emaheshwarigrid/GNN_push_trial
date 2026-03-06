@@ -239,6 +239,31 @@ Use the notebooks to extend experiments; use the Streamlit app to share results 
 
 ---
 
+## 🔬 Running All Experiments
+
+To reproduce all results from scratch, you can run all notebooks sequentially. This will:
+- Perform grid searches for each architecture
+- Run stability tests
+- Generate final diagnostics and visualizations
+- Save all champion models to `app_data/`
+
+```bash
+# 60/20/20 Split Experiments
+jupyter notebook 3_baseline_gcn.ipynb
+jupyter notebook 4_gat_model.ipynb
+jupyter notebook 5_graphsage_model.ipynb
+jupyter notebook 6_appnp_model.ipynb
+
+# 80/10/10 Split Experiments
+jupyter notebook 3_baseline_gcn90.ipynb
+jupyter notebook 4_gat80_model.ipynb
+jupyter notebook 5_graphsage80_model.ipynb
+jupyter notebook 6_appnp_model80.ipynb
+
+# Champion & Robustness Experiments
+jupyter notebook 7_champion_experiments.ipynb
+jupyter notebook 7_champion_expirements2.ipynb
+
 ## 📧 Questions or Contributions?
 
 Feel free to open issues or submit pull requests. For deployment help, refer to [Streamlit Cloud documentation](https://docs.streamlit.io/streamlit-cloud).
