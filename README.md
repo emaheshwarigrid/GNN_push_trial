@@ -19,7 +19,7 @@ The notebooks document every step of the process; the Streamlit app lets you sha
 
 ## 🚀 Live Streamlit App
 
-Access the interactive dashboard here: **[Streamlit App](https://your-app-name.streamlit.app)**
+Access the interactive dashboard here: **[Streamlit App](https://gnn-citation-explorer.streamlit.app/)**
 
 The app loads instantly with pre-trained models and visualizes the Cora citation network in real-time.
 
@@ -191,10 +191,10 @@ Later notebooks introduce:
 
 | Model | LR | Hidden Dim | Dropout | Layers/Hops | Test Accuracy | Macro-F1 |
 |-------|----|----|---------|----------|---------------|----------|
-| APPNP | 0.01 | 64 | 0.3 | K=10, α=0.1 | ~89% | ~87% |
-| GAT | 0.01 | 64 | 0.3 | 2-4 | ~85% | ~84% |
-| GraphSAGE | 0.01 | 64 | 0.3 | 2-4 | ~82% | ~80% |
-| GCN | 0.01 | 64 | 0.3 | 2 | ~88% | ~86% |
+| APPNP | 0.01 | 64 | 0.3 | K=10, α=0.1 | ~90.77% | ~91.11% |
+| GAT | 0.01 | 64 | 0.3 | 2-4 | ~88.1% | ~87% |
+| GraphSAGE | 0.01 | 64 | 0.3 | 2-4 | ~88.6% | ~89% |
+| GCN | 0.01 | 64 | 0.3 | 2 | ~90.77% | ~90.60% |
 
 *Note: Exact values vary by seed; see notebooks for full results.*
 
@@ -263,7 +263,7 @@ jupyter notebook 6_appnp_model80.ipynb
 # Champion & Robustness Experiments
 jupyter notebook 7_champion_experiments.ipynb
 jupyter notebook 7_champion_expirements2.ipynb
-
+```
 ## 📧 Questions or Contributions?
 
 Feel free to open issues or submit pull requests. For deployment help, refer to [Streamlit Cloud documentation](https://docs.streamlit.io/streamlit-cloud).
