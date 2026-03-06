@@ -1,0 +1,28 @@
+# Virtual Environment
+.venv/
+venv/
+env/
+.env
+
+# Python caching
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+# Data and large files
+# Ignores ONLY the raw Cora download folder
+# DO NOT ignore app_data/ itself, or your .pth and .pt files won't upload!
+
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# App-generated files
+graph.html
