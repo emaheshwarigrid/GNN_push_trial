@@ -54,11 +54,19 @@ matplotlib
 streamlit==1.28.0
 pyvis
 ```
+How to install Brew 
+```bash 
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+Install Python 3.9 version 
+```bash
+brew install python@3.9
+```
 
 Install with:
 
 ```bash
-python -m venv .venv
+python3.9 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
