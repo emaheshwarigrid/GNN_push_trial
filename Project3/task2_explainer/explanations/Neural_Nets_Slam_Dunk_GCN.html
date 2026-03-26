@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 600px;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#3498db", "font": {"color": "white"}, "id": 2, "label": "ID: 2", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 14, "label": "ID: 14", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 45, "label": "ID: 45", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 68, "label": "ID: 68", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 71, "label": "ID: 71", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 151, "label": "ID: 151", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 160, "label": "ID: 160", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 179, "label": "ID: 179", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 201, "label": "ID: 201", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 215, "label": "ID: 215", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 232, "label": "ID: 232", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 309, "label": "ID: 309", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 335, "label": "ID: 335", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 366, "label": "ID: 366", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 383, "label": "ID: 383", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 391, "label": "ID: 391", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 435, "label": "ID: 435", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 460, "label": "ID: 460", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 476, "label": "ID: 476", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 486, "label": "ID: 486", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 519, "label": "ID: 519", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 566, "label": "ID: 566", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 673, "label": "ID: 673", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 681, "label": "ID: 681", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 733, "label": "ID: 733", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 743, "label": "ID: 743", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 745, "label": "ID: 745", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 792, "label": "ID: 792", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 899, "label": "ID: 899", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 968, "label": "ID: 968", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 995, "label": "ID: 995", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1020, "label": "ID: 1020", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1023, "label": "ID: 1023", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1095, "label": "ID: 1095", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1127, "label": "ID: 1127", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1149, "label": "ID: 1149", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1166, "label": "ID: 1166", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1174, "label": "ID: 1174", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1296, "label": "ID: 1296", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1338, "label": "ID: 1338", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1434, "label": "ID: 1434", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1453, "label": "ID: 1453", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1558, "label": "ID: 1558", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1574, "label": "ID: 1574", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1609, "label": "ID: 1609", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1697, "label": "ID: 1697", "shape": "dot", "size": 15}, {"color": "#e74c3c", "font": {"color": "white"}, "id": 1704, "label": "Target 1704", "shape": "dot", "size": 25}, {"color": "#3498db", "font": {"color": "white"}, "id": 1709, "label": "ID: 1709", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1812, "label": "ID: 1812", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1859, "label": "ID: 1859", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1870, "label": "ID: 1870", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1873, "label": "ID: 1873", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1875, "label": "ID: 1875", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1876, "label": "ID: 1876", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1912, "label": "ID: 1912", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1986, "label": "ID: 1986", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1987, "label": "ID: 1987", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1988, "label": "ID: 1988", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1989, "label": "ID: 1989", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1990, "label": "ID: 1990", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1991, "label": "ID: 1991", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1992, "label": "ID: 1992", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1993, "label": "ID: 1993", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1994, "label": "ID: 1994", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1995, "label": "ID: 1995", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1996, "label": "ID: 1996", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1997, "label": "ID: 1997", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1998, "label": "ID: 1998", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 1999, "label": "ID: 1999", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 2000, "label": "ID: 2000", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 2001, "label": "ID: 2001", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 2002, "label": "ID: 2002", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 2003, "label": "ID: 2003", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 2004, "label": "ID: 2004", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 2005, "label": "ID: 2005", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 2006, "label": "ID: 2006", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 2007, "label": "ID: 2007", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 2008, "label": "ID: 2008", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 2009, "label": "ID: 2009", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 2075, "label": "ID: 2075", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 2076, "label": "ID: 2076", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 2077, "label": "ID: 2077", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 2102, "label": "ID: 2102", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 2103, "label": "ID: 2103", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 2268, "label": "ID: 2268", "shape": "dot", "size": 15}, {"color": "#3498db", "font": {"color": "white"}, "id": 2404, "label": "ID: 2404", "shape": "dot", "size": 15}]);
+                  edges = new vis.DataSet([{"color": "#2ecc71", "from": 309, "title": "Importance: 0.789", "to": 383, "value": 0.7894083261489868}, {"color": "#7f8c8d", "from": 733, "title": "Importance: 0.157", "to": 383, "value": 0.1570967584848404}, {"color": "#2ecc71", "from": 1704, "title": "Importance: 0.753", "to": 383, "value": 0.7529230713844299}, {"color": "#7f8c8d", "from": 2268, "title": "Importance: 0.214", "to": 383, "value": 0.2142837792634964}, {"color": "#2ecc71", "from": 1912, "title": "Importance: 0.725", "to": 1704, "value": 0.7254546284675598}, {"color": "#2ecc71", "from": 1986, "title": "Importance: 0.610", "to": 1704, "value": 0.6104903221130371}, {"color": "#2ecc71", "from": 2077, "title": "Importance: 0.686", "to": 1704, "value": 0.685668408870697}, {"color": "#2ecc71", "from": 435, "title": "Importance: 0.746", "to": 1912, "value": 0.7456831932067871}, {"color": "#7f8c8d", "from": 995, "title": "Importance: 0.152", "to": 1912, "value": 0.15235257148742676}, {"color": "#7f8c8d", "from": 1174, "title": "Importance: 0.170", "to": 1912, "value": 0.17049655318260193}, {"color": "#7f8c8d", "from": 1296, "title": "Importance: 0.143", "to": 1912, "value": 0.14304161071777344}, {"color": "#7f8c8d", "from": 1338, "title": "Importance: 0.149", "to": 1912, "value": 0.14926046133041382}, {"color": "#7f8c8d", "from": 1609, "title": "Importance: 0.149", "to": 1912, "value": 0.1487404853105545}, {"color": "#7f8c8d", "from": 2102, "title": "Importance: 0.148", "to": 1912, "value": 0.14814308285713196}, {"color": "#7f8c8d", "from": 2103, "title": "Importance: 0.154", "to": 1912, "value": 0.1544049233198166}, {"color": "#7f8c8d", "from": 2404, "title": "Importance: 0.195", "to": 1912, "value": 0.19527266919612885}, {"color": "#7f8c8d", "from": 2, "title": "Importance: 0.141", "to": 1986, "value": 0.14061522483825684}, {"color": "#7f8c8d", "from": 45, "title": "Importance: 0.141", "to": 1986, "value": 0.14131002128124237}, {"color": "#7f8c8d", "from": 68, "title": "Importance: 0.149", "to": 1986, "value": 0.14883512258529663}, {"color": "#7f8c8d", "from": 71, "title": "Importance: 0.142", "to": 1986, "value": 0.14219853281974792}, {"color": "#7f8c8d", "from": 151, "title": "Importance: 0.147", "to": 1986, "value": 0.14674551784992218}, {"color": "#7f8c8d", "from": 160, "title": "Importance: 0.149", "to": 1986, "value": 0.1486663967370987}, {"color": "#7f8c8d", "from": 179, "title": "Importance: 0.144", "to": 1986, "value": 0.14414584636688232}, {"color": "#7f8c8d", "from": 201, "title": "Importance: 0.146", "to": 1986, "value": 0.14564241468906403}, {"color": "#7f8c8d", "from": 215, "title": "Importance: 0.152", "to": 1986, "value": 0.151716947555542}, {"color": "#7f8c8d", "from": 232, "title": "Importance: 0.146", "to": 1986, "value": 0.14604876935482025}, {"color": "#7f8c8d", "from": 335, "title": "Importance: 0.142", "to": 1986, "value": 0.14219671487808228}, {"color": "#7f8c8d", "from": 366, "title": "Importance: 0.142", "to": 1986, "value": 0.14172393083572388}, {"color": "#7f8c8d", "from": 391, "title": "Importance: 0.147", "to": 1986, "value": 0.14749008417129517}, {"color": "#7f8c8d", "from": 460, "title": "Importance: 0.144", "to": 1986, "value": 0.14400266110897064}, {"color": "#7f8c8d", "from": 476, "title": "Importance: 0.154", "to": 1986, "value": 0.1537458449602127}, {"color": "#7f8c8d", "from": 519, "title": "Importance: 0.145", "to": 1986, "value": 0.14541250467300415}, {"color": "#7f8c8d", "from": 566, "title": "Importance: 0.141", "to": 1986, "value": 0.1410646140575409}, {"color": "#7f8c8d", "from": 673, "title": "Importance: 0.143", "to": 1986, "value": 0.14254765212535858}, {"color": "#7f8c8d", "from": 681, "title": "Importance: 0.195", "to": 1986, "value": 0.19489386677742004}, {"color": "#7f8c8d", "from": 743, "title": "Importance: 0.140", "to": 1986, "value": 0.14022523164749146}, {"color": "#7f8c8d", "from": 745, "title": "Importance: 0.143", "to": 1986, "value": 0.14313384890556335}, {"color": "#7f8c8d", "from": 792, "title": "Importance: 0.140", "to": 1986, "value": 0.13983000814914703}, {"color": "#7f8c8d", "from": 899, "title": "Importance: 0.148", "to": 1986, "value": 0.14796923100948334}, {"color": "#7f8c8d", "from": 968, "title": "Importance: 0.147", "to": 1986, "value": 0.14723972976207733}, {"color": "#7f8c8d", "from": 1023, "title": "Importance: 0.143", "to": 1986, "value": 0.1430937796831131}, {"color": "#7f8c8d", "from": 1095, "title": "Importance: 0.152", "to": 1986, "value": 0.1515948474407196}, {"color": "#7f8c8d", "from": 1127, "title": "Importance: 0.143", "to": 1986, "value": 0.14344704151153564}, {"color": "#7f8c8d", "from": 1149, "title": "Importance: 0.141", "to": 1986, "value": 0.14054329693317413}, {"color": "#7f8c8d", "from": 1166, "title": "Importance: 0.153", "to": 1986, "value": 0.15297673642635345}, {"color": "#7f8c8d", "from": 1434, "title": "Importance: 0.143", "to": 1986, "value": 0.1429375559091568}, {"color": "#7f8c8d", "from": 1453, "title": "Importance: 0.145", "to": 1986, "value": 0.14481593668460846}, {"color": "#7f8c8d", "from": 1558, "title": "Importance: 0.143", "to": 1986, "value": 0.14319714903831482}, {"color": "#7f8c8d", "from": 1574, "title": "Importance: 0.142", "to": 1986, "value": 0.14248299598693848}, {"color": "#7f8c8d", "from": 1697, "title": "Importance: 0.143", "to": 1986, "value": 0.1425141543149948}, {"color": "#7f8c8d", "from": 1709, "title": "Importance: 0.145", "to": 1986, "value": 0.14498333632946014}, {"color": "#7f8c8d", "from": 1812, "title": "Importance: 0.145", "to": 1986, "value": 0.14512725174427032}, {"color": "#7f8c8d", "from": 1859, "title": "Importance: 0.142", "to": 1986, "value": 0.14233440160751343}, {"color": "#7f8c8d", "from": 1870, "title": "Importance: 0.144", "to": 1986, "value": 0.1443995088338852}, {"color": "#7f8c8d", "from": 1873, "title": "Importance: 0.142", "to": 1986, "value": 0.1418209969997406}, {"color": "#7f8c8d", "from": 1875, "title": "Importance: 0.145", "to": 1986, "value": 0.14479446411132812}, {"color": "#7f8c8d", "from": 1876, "title": "Importance: 0.155", "to": 1986, "value": 0.1548290103673935}, {"color": "#7f8c8d", "from": 1987, "title": "Importance: 0.140", "to": 1986, "value": 0.13985750079154968}, {"color": "#7f8c8d", "from": 1988, "title": "Importance: 0.173", "to": 1986, "value": 0.173247292637825}, {"color": "#7f8c8d", "from": 1989, "title": "Importance: 0.149", "to": 1986, "value": 0.14942137897014618}, {"color": "#7f8c8d", "from": 1990, "title": "Importance: 0.139", "to": 1986, "value": 0.13914723694324493}, {"color": "#7f8c8d", "from": 1991, "title": "Importance: 0.149", "to": 1986, "value": 0.148897185921669}, {"color": "#7f8c8d", "from": 1992, "title": "Importance: 0.140", "to": 1986, "value": 0.1404828429222107}, {"color": "#7f8c8d", "from": 1993, "title": "Importance: 0.142", "to": 1986, "value": 0.1415359228849411}, {"color": "#7f8c8d", "from": 1994, "title": "Importance: 0.163", "to": 1986, "value": 0.1626185029745102}, {"color": "#7f8c8d", "from": 1995, "title": "Importance: 0.142", "to": 1986, "value": 0.14211300015449524}, {"color": "#7f8c8d", "from": 1996, "title": "Importance: 0.139", "to": 1986, "value": 0.13923238217830658}, {"color": "#7f8c8d", "from": 1997, "title": "Importance: 0.147", "to": 1986, "value": 0.14747005701065063}, {"color": "#7f8c8d", "from": 1998, "title": "Importance: 0.143", "to": 1986, "value": 0.14303982257843018}, {"color": "#7f8c8d", "from": 1999, "title": "Importance: 0.156", "to": 1986, "value": 0.1557084619998932}, {"color": "#7f8c8d", "from": 2000, "title": "Importance: 0.153", "to": 1986, "value": 0.15260820090770721}, {"color": "#7f8c8d", "from": 2001, "title": "Importance: 0.146", "to": 1986, "value": 0.14625608921051025}, {"color": "#7f8c8d", "from": 2002, "title": "Importance: 0.144", "to": 1986, "value": 0.14440013468265533}, {"color": "#7f8c8d", "from": 2003, "title": "Importance: 0.141", "to": 1986, "value": 0.1414063423871994}, {"color": "#7f8c8d", "from": 2004, "title": "Importance: 0.148", "to": 1986, "value": 0.14752909541130066}, {"color": "#7f8c8d", "from": 2005, "title": "Importance: 0.145", "to": 1986, "value": 0.14461302757263184}, {"color": "#7f8c8d", "from": 2006, "title": "Importance: 0.154", "to": 1986, "value": 0.15379445254802704}, {"color": "#7f8c8d", "from": 2007, "title": "Importance: 0.185", "to": 1986, "value": 0.1845264583826065}, {"color": "#7f8c8d", "from": 2008, "title": "Importance: 0.160", "to": 1986, "value": 0.15967540442943573}, {"color": "#7f8c8d", "from": 2009, "title": "Importance: 0.143", "to": 1986, "value": 0.14347617328166962}, {"color": "#2ecc71", "from": 14, "title": "Importance: 0.728", "to": 2077, "value": 0.7283732891082764}, {"color": "#2ecc71", "from": 486, "title": "Importance: 0.713", "to": 2077, "value": 0.7134331464767456}, {"color": "#2ecc71", "from": 1020, "title": "Importance: 0.692", "to": 2077, "value": 0.6921144127845764}, {"color": "#2ecc71", "from": 2075, "title": "Importance: 0.766", "to": 2077, "value": 0.7658784985542297}, {"color": "#2ecc71", "from": 2076, "title": "Importance: 0.703", "to": 2077, "value": 0.7029067277908325}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
