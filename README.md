@@ -51,8 +51,24 @@ Directory-level guides are included here:
 
 This makes the project read naturally as:
 
-- explore broadly on one regime,
-- then check whether the better configurations still hold when more training data is available.
+```text
+torch==2.10.0
+torch-geometric==2.7.0
+pandas
+numpy
+scikit-learn
+matplotlib
+streamlit==1.28.0
+pyvis
+```
+How to install Brew 
+```bash 
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+Install Python 3.9 version 
+```bash
+brew install python@3.9
+```
 
 ### Why compare four architectures?
 
@@ -84,7 +100,7 @@ The extension tasks were chosen to cover production concerns that do not show up
 From the repository root:
 
 ```bash
-python3 -m venv .venv
+python3.9 -m venv .venv
 source .venv/bin/activate
 python3 -m pip install --upgrade pip
 python3 -m pip install -r requirements.txt
