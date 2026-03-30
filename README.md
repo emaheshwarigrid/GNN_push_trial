@@ -104,11 +104,6 @@ python3.9 -m venv .venv
 source .venv/bin/activate
 python3 -m pip install --upgrade pip
 python3 -m pip install -r requirements.txt
-```
-
-Optional task-specific packages used by some extensions:
-
-```bash
 python3 -m pip install psutil networkx certifi onnxscript
 python3 -m pip install coremltools
 ```
